@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audio Player</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+  <div>
+    <h3>Available Musics</h3>
+    <div id="musics"></div>
+  </div>
+  <hr />
+  <div>
+    <h3>Your Playlist</h3>
+    <div id="playlist"></div>
+  </div>
+
+  <div id="videoContainer">
+    <iframe width="450" height="283" src="" frameborder="0" allowfullscreen wmode="Opaque"></iframe>
+  </div>
+  <script>
+    
+    $(document).ready(function () {
+      let musics = ''
+      let playlistElement= ''
+      let playlists = []
+      const musicData = [
+        {
+        title:"Dance Monkey",
+        link:"https://www.youtube.com/embed/q0hyYWKXF0Q"
+      },{
+        title:"Raabtha",
+        link:"https://www.youtube.com/embed/ejYNrzoNJpM"
+      }
+      ,{
+        title:"Dil Diya Gallan",
+        link:"https://www.youtube.com/embed/2SQkGG5qQmg"
+      }
+    ]
+
+    
+      jQuery.each(musicData, function(i, val) {
+            musics += '<div style="margin-bottom:5px" >'+val.title + ` <button class="add-btn" data-value=${i}>Add to Playlist</button> </div><br />`;
+          });
+
+      $('#musics').html(musics)
+
+      $('.add-btn').click(function(e){
+        $("#playlist").empty()
+       let indexValue = e.target.attributes[1].value
+       playlists.push(musicData[indexValue])
+       console.log(playlists)
+       playlists.forEach(function(item,index){
+         console.log(item)
+        $("#playlist").append(`<div style="margin-bottom:10px" id="${index}-playlist">${item.title} <button class="play-btn" data-value="${item.title}">Play</button> <button class="remove-btn" data-value="${index}">Remove from Playlist</button></div>`)
+       })
+      });
+
+      $("#playlist").on("click", ".play-btn", function(e) {
+        musicData.forEach(function(item,index){
+          if(e.target.attributes[1].value===item.title){ 
+            console.log('link',item.link)
+            return autoPlayVideo(item.link,'450','283');
+          }
+        })
+      });
+
+      $("#playlist").on("click", ".remove-btn", function(e) {
+        console.log('remove element')
+        
+      });
+
+      // $.each(playlists, function(i, val) {  
+      //    console.log('val',val)
+      //    $("#playlist").append(i+":"+val.title)
+      //  })
+
+      
+
+      
+      
+        
+          
+
+    
+      // $('a.introVid').click(function(){
+      //   autoPlayVideo('https://www.youtube.com/embed/q0hyYWKXF0Q','450','283');
+      // });
+    });
+   
+    
+/*--------------------------------
+  Swap video with autoplay video
+---------------------------------*/
+
+function autoPlayVideo(vcode, width, height){
+  "use strict";
+  $("#videoContainer").html('<iframe width="'+width+'" height="'+height+'" src="'+vcode+'?autoplay=1&loop=1&rel=0&wmode=transparent" frameborder="0" allowfullscreen wmode="Opaque"></iframe>');
+}
+  </script>
+</body>
+</html>
